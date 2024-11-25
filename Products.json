@@ -1,0 +1,84 @@
+{
+  "Products": [
+    {
+      "Name": "Monstera Deliciosa",
+      "Price": 249
+    },
+    {
+      "Name": "Cactus - Mini",
+      "Price": 79
+    },
+    {
+      "Name": "Self-watering Pot",
+      "Price": 199
+    },
+    {
+      "Name": "Book: Plant Care for Beginners",
+      "Price": 299
+    },
+    {
+      "Name": "Nutrient Sticks for Potted Plants",
+      "Price": 49
+    },
+    {
+      "Name": "Fiddle Leaf Fig",
+      "Price": 399
+    },
+    {
+      "Name": "Hanging Pot for Plants",
+      "Price": 149
+    },
+    {
+      "Name": "Orchid Soil - 5 liters",
+      "Price": 99
+    },
+    {
+      "Name": "LED Grow Light",
+      "Price": 349
+    },
+    {
+      "Name": "Decorative Stones for Pots",
+      "Price": 69
+    },
+    {
+      "Name": "Bonsai Tree - Starter Kit",
+      "Price": 499
+    },
+    {
+      "Name": "Metal Watering Can - 1 liter",
+      "Price": 179
+    },
+    {
+      "Name": "Plant Spray for Shiny Leaves",
+      "Price": 89
+    },
+    {
+      "Name": "Seed Packets - Mixed Herbs",
+      "Price": 59
+    },
+    {
+      "Name": "Hanging Macrame Pot",
+      "Price": 129
+    },
+    {
+      "Name": "Mini Greenhouse for Cuttings",
+      "Price": 299
+    },
+    {
+      "Name": "Plant Nutrient - Universal",
+      "Price": 89
+    },
+    {
+      "Name": "Climbing Plant Support in Bamboo",
+      "Price": 109
+    },
+    {
+      "Name": "Geranium - Pink",
+      "Price": 129
+    },
+    {
+      "Name": "Plant Light - Clip-on",
+      "Price": 399
+    }
+  ]
+}
