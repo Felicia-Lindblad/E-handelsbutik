@@ -50,29 +50,25 @@ namespace E_handelsbutik
             while (isCustomerRunning)
             {
                 Console.WriteLine("\nKundmeny:");
-                Console.WriteLine("1. Visa alla produkter");
-                Console.WriteLine("2. Lägg till produkt i varukorgen");
-                Console.WriteLine("3. Ta bort produkt från varukorgen");
-                Console.WriteLine("4. Visa varukorgen");
-                Console.WriteLine("5. Tillbaka till huvudmenyn");
+                Console.WriteLine("1. Lägg till produkt i varukorgen");
+                Console.WriteLine("2. Ta bort produkt från varukorgen");
+                Console.WriteLine("3. Visa varukorgen");
+                Console.WriteLine("4. Tillbaka till huvudmenyn");
                 Console.Write("Ditt val: ");
                 string customerChoice = Console.ReadLine()!;
 
                 switch (customerChoice)
                 {
                     case "1":
-                        userInterface.ShowAllItems();
+                        userInterface.AddItemToCart();
                         break;
                     case "2":
-                        userInterface.AdItemToCart();
-                        break;
-                    case "3":
                         userInterface.RemoveItemFromCart();
                         break;
-                    case "4":
+                    case "3":
                         userInterface.ShowAllItemsInCart();
                         break;
-                    case "5":
+                    case "4":
                         isCustomerRunning = false;
                         break;
                     default:
