@@ -5,7 +5,7 @@ namespace E_handelsbutik
 {
     public class UserInterface
     {
-        public void AdItemToCart()
+        public void AddItemToCart()
         {
 
         }
@@ -14,10 +14,6 @@ namespace E_handelsbutik
 
         }
         public void ShowAllItemsInCart()
-        {
-
-        }
-        public void ShowAllItems()
         {
 
         }
