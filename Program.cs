@@ -11,7 +11,7 @@ namespace E_handelsbutik
 
             LittleDB littleDB = JsonSerializer.Deserialize<LittleDB>(allDataAsJSONType)!;
 
-            UserInterface userInterface = new UserInterface();
+            UserInterface userInterface = new UserInterface(littleDB);
             StoreManager storeManager = new StoreManager();
 
             bool isRunning = true;
@@ -28,7 +28,7 @@ namespace E_handelsbutik
                 switch (choice)
                 {
                     case "1":
-                        CustomerMenu(userInterface, littleDB);
+                        CustomerMenu(userInterface, littleDB, dataJSONFilePath);
                         break;
                     case "2":
                         StoreManagerMenu(storeManager, littleDB, dataJSONFilePath);
@@ -43,7 +43,7 @@ namespace E_handelsbutik
                 }
             }
         }
-        static void CustomerMenu(UserInterface userInterface, LittleDB littleDB)
+        static void CustomerMenu(UserInterface userInterface, LittleDB littleDB, string dataJSONFilePath)
         {
             bool isCustomerRunning = true;
 
@@ -53,14 +53,16 @@ namespace E_handelsbutik
                 Console.WriteLine("1. Lägg till produkt i varukorgen");
                 Console.WriteLine("2. Ta bort produkt från varukorgen");
                 Console.WriteLine("3. Visa varukorgen");
-                Console.WriteLine("4. Tillbaka till huvudmenyn");
+                Console.WriteLine("4. Till kassan");
+                Console.WriteLine("5. Tillbaka till huvudmenyn");
                 Console.Write("Ditt val: ");
                 string customerChoice = Console.ReadLine()!;
 
                 switch (customerChoice)
                 {
                     case "1":
-                        userInterface.AddItemToCart();
+                        userInterface.AddItemToCart(littleDB.AllItemsFromListInJSON);
+                        SaveNewDataToJSONFile(littleDB, dataJSONFilePath);
                         break;
                     case "2":
                         userInterface.RemoveItemFromCart();
@@ -69,6 +71,10 @@ namespace E_handelsbutik
                         userInterface.ShowAllItemsInCart();
                         break;
                     case "4":
+                        userInterface.CheckOut();
+                        SaveNewDataToJSONFile(littleDB, dataJSONFilePath);
+                        break;
+                    case "5":
                         isCustomerRunning = false;
                         break;
                     default:
