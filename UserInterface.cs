@@ -1,4 +1,5 @@
 ﻿
+using Spectre.Console;
 using System.Xml.Serialization;
 
 namespace E_handelsbutik
@@ -15,60 +16,87 @@ namespace E_handelsbutik
         }
         public void AddItemToCart(List<Item> allItems)
         {
-            bool continueAdding = true;
+            // Visa tillgängliga produkter i en interaktiv lista
+            var productMenu = new SelectionPrompt<Item>()
+                .Title("[bold underline]Välj en produkt att lägga till i varukorgen:[/]")
+                .PageSize(10) // Begränsa hur många alternativ som visas på en gång
+                .AddChoices(allItems)
+                .UseConverter(item => $"{item.Name} - {item.Price} kr");
 
-            while (continueAdding)
-            {
-                Console.WriteLine("Tillgängliga produkter:");
-                allItems.ForEach(item =>
-                    Console.WriteLine($"{item.Name} - {item.Price} kr"));
+            // Låt användaren välja en produkt
+            var selectedProduct = AnsiConsole.Prompt(productMenu);
 
-                Console.Write("Ange namnet på produkten du vill lägga till i kundkorgen: ");
-                string productName = Console.ReadLine()!;
-
-                var productToAdd = allItems.FirstOrDefault(item => item.Name.Equals(productName, StringComparison.OrdinalIgnoreCase));
-
-                if (productToAdd != null)
-                {
-                    shoppingCart.AddItemToShoppningCart(productToAdd);
-                }
-                else
-                {
-                    Console.WriteLine("Produkten hittades inte.");
-                }
-
-                Console.Write("Vill du lägga till en annan produkt? (ja/nej): ");
-                string response = Console.ReadLine()!;
-                continueAdding = response.Equals("ja", StringComparison.OrdinalIgnoreCase);
-            }
+            // Lägg till den valda produkten i varukorgen
+            shoppingCart.AddItemToShoppningCart(selectedProduct);
         }
         public void RemoveItemFromCart()
         {
             if (shoppingCart.CalculateTotal() == 0)
             {
-                Console.WriteLine("Kundkorgen är tom. Det finns inga produkter att ta bort.");
+                // Om varukorgen är tom, visa ett meddelande
+                AnsiConsole.MarkupLine("[bold red]Kundkorgen är tom. Det finns inga produkter att ta bort.[/]");
                 return;
             }
 
-            Console.WriteLine("Produkter i din kundkorg:");
-            shoppingCart.ShowItems();
+            // Visa varor i kundkorgen
+            var cartItemsMenu = new SelectionPrompt<Item>()
+                .Title("[bold underline]Välj en produkt att ta bort från varukorgen:[/]")
+                .PageSize(10)
+                .AddChoices(shoppingCart.GetItems())  // Hämtar alla objekt i varukorgen
+                .UseConverter(item => $"{item.Name} - {item.Price} kr");
 
-            Console.Write("Ange namnet på produkten du vill ta bort från kundkorgen: ");
-            string productName = Console.ReadLine()!;
+            // Låt användaren välja en produkt att ta bort
+            var selectedProductToRemove = AnsiConsole.Prompt(cartItemsMenu);
 
-            // Anropa RemoveItemFromShoppingcart från ShoppingCart-klassen
-            shoppingCart.RemoveItemFromShoppingcart(productName);
+            // Bekräfta borttagning med en ja/nej-fråga
+            bool confirmRemoval = AnsiConsole.Prompt(
+                new TextPrompt<string>("[bold]Vill du ta bort[/] [yellow]" + selectedProductToRemove.Name + "[/] [bold]från varukorgen? (ja/nej)[/]")
+                    .Validate(value => value.Equals("ja", StringComparison.OrdinalIgnoreCase) || value.Equals("nej", StringComparison.OrdinalIgnoreCase) ? ValidationResult.Success() : ValidationResult.Error("[red]Vänligen skriv 'ja' eller 'nej'[/]"))
+            ).Equals("ja", StringComparison.OrdinalIgnoreCase);
+
+            if (confirmRemoval)
+            {
+                shoppingCart.RemoveItemFromShoppingcart(selectedProductToRemove.Name);
+                AnsiConsole.MarkupLine($"[green]Produkten '{selectedProductToRemove.Name}' har tagits bort från varukorgen.[/]");
+            }
+            else
+            {
+                AnsiConsole.MarkupLine("[yellow]Borttagning avbröts.[/]");
+            }
         }
         public void ShowAllItemsInCart()
         {
+            // Om varukorgen är tom
+            if (shoppingCart.CalculateTotal() == 0)
+            {
+                AnsiConsole.MarkupLine("[bold red]Kundkorgen är tom.[/]");
+                return;
+            }
+
+            // Visa varor i varukorgen
+            AnsiConsole.MarkupLine("[bold underline]Varor i din varukorg:[/]");
             shoppingCart.ShowItems();
-            Console.WriteLine($"Totalbelopp: {shoppingCart.CalculateTotal()} kr");
+
+            // Visa totalbelopp i en stilig form
+            AnsiConsole.MarkupLine($"[bold green]Totalbelopp:[/] [yellow]{shoppingCart.CalculateTotal()} kr[/]");
         }
         public void CheckOut()
         {
+            if (shoppingCart.CalculateTotal() == 0)
+            {
+                AnsiConsole.MarkupLine("[bold red]Din varukorg är tom![/]");
+                return;
+            }
+
+            // Visa varor i varukorgen innan kassan
+            AnsiConsole.MarkupLine("[bold underline]Din varukorg innehåller följande produkter:[/]");
             shoppingCart.ShowItems();
-            Console.WriteLine($"Totalbelopp att betala: {shoppingCart.CalculateTotal()} kr");
-            Console.WriteLine("Tack för ditt köp!");
+
+            // Visa totalbeloppet att betala
+            AnsiConsole.MarkupLine($"[bold green]Totalbelopp att betala:[/] [yellow]{shoppingCart.CalculateTotal()} kr[/]");
+
+            // Tackmeddelande
+            AnsiConsole.MarkupLine("[bold blue]Tack för ditt köp![/]");
         }
     }
 }

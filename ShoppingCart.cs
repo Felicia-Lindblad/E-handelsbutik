@@ -50,5 +50,9 @@
         {
             return itemsInCart.Sum(item => item.Price);
         }
+        public List<Item> GetItems()
+        {
+            return itemsInCart;
+        }
     }
 }
